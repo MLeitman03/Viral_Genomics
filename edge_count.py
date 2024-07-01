@@ -17,4 +17,3 @@ df = pd.merge(edge_df, network_labels_df, left_on=0, right_on='Genome', how='lef
 df.rename(columns={0:'Source', 1:'Target', 2:'edge_weight'}, inplace=True)
 
 
-
