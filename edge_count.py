@@ -55,17 +55,52 @@ df.loc[df['Target'].str.contains('pre', na=False), 'Target Time Label'] = 'Non-I
 
 
 #%%
-# Plot edge weights
+# New dataframe with count
+ind_source_df = df.loc[df['Source Time Label'] == 'Industrial'].loc[:, ['Source', 'Target', 'Source Time Label', 'Target Time Label', 'edge_weight', 'Source Lifestyle', 'Target Lifestyle']]
+non_source_df = df.loc[df['Source Time Label'] == 'Non-Industrial'].loc[:, ['Source', 'Target', 'Source Time Label', 'Target Time Label', 'edge_weight', 'Source Lifestyle','Target Lifestyle']]
+pre_source_df = df.loc[df['Source Time Label'] == 'Pre-modern'].loc[:, ['Source', 'Target', 'Source Time Label', 'Target Time Label', 'edge_weight', 'Source Lifestyle','Target Lifestyle']]
 
-plt.figure(figsize=(12, 6))
+#does ind-DNK_MH0192_k99_103327 source go to pal-BMS_UT30.3_k141_1024356 target?
 
-# Create a violin plot
-sns.violinplot(x='Source Time Label', y='edge_weight', hue='Target Time Label', data=df, split=True, inner="quart", palette="muted")
+testing = ind_source_df.loc[(ind_source_df['Source'] == 'ind-DNK_MH0192_k99_103327') & (ind_source_df['Target'].str.contains('pal')), 'Target']
 
-# Add titles and labels
-plt.title('Violin Plot of Source Genomes by Target Genomes')
-plt.xlabel('Source Time Label')
-plt.ylabel('Edge Weight')
+#yes, meaning each source is a target and vice versa
 
-# Show plot
+#%%
+#target time label counts for industiral source
+ind_target_counts = ind_source_df['Target Time Label'].value_counts()
+#normalized
+ind_target_counts_normalized = ind_target_counts / ind_target_counts.sum()
+
+#target time label counts for non-industrial source
+non_target_counts = non_source_df['Target Time Label'].value_counts()
+#normalized
+non_target_counts_normalized = non_target_counts / non_target_counts.sum()
+
+#target time label counts for pre-modern source
+pre_target_counts = pre_source_df['Target Time Label'].value_counts()
+#normalized
+pre_target_counts_normalized = pre_target_counts / pre_target_counts.sum()
+
+#maybe see what type of database viruses they are most similar to?
+
+#%%
+#Combine normalized target counts
+
+target_counts_df = pd.DataFrame(index = ['Industrial','Non-Industrial', 'Pre-modern'], columns = ['Industrial','Non-Industrial', 'Pre-modern', 'Database Virus'])
+target_counts_df.loc['Industrial'] = ind_target_counts_normalized
+target_counts_df.loc['Non-Industrial'] = non_target_counts_normalized
+target_counts_df.loc['Pre-modern'] = pre_target_counts_normalized
+
+#%%
+#Make heatmap
+target_counts_df = target_counts_df.astype(float)
+plt.figure()
+sns.heatmap(target_counts_df)
+plt.title('Normalized Target Time Label Counts by Source Time Label')
+plt.ylabel('Source Time Label')
+plt.xlabel('Target Time Label')
 plt.show()
+
+
+
