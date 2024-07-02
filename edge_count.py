@@ -102,5 +102,6 @@ plt.ylabel('Source Time Label')
 plt.xlabel('Target Time Label')
 plt.show()
 
-
+import matplotlib
+matplotlib.use('TkAgg')  # or 'Qt5Agg', 'Agg', 'TkAgg', etc.
 
