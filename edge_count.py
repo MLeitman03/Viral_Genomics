@@ -259,5 +259,5 @@ plt.xlabel('Source Type')
 plt.legend(title='Target Type', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 
-plot_filename = 'violinplot_combined_normalized.png'
+plot_filename = 'violinplot_edge_counts.png'
 plt.savefig(plot_filename)
