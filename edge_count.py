@@ -43,14 +43,14 @@ df['Source Time Label'] = 'Database Virus'
 df['Target Time Label'] = 'Database Virus'
 
 # Update 'Source Time Label' based on conditions
-df.loc[df['Source'].str.contains('ind', na=False), 'Source Time Label'] = 'Industrial'
-df.loc[df['Source'].str.contains('pal', na=False), 'Source Time Label'] = 'Pre-modern'
-df.loc[df['Source'].str.contains('pre', na=False), 'Source Time Label'] = 'Non-Industrial'
+df.loc[df['Source'].str.contains('ind-', na=False), 'Source Time Label'] = 'Industrial'
+df.loc[df['Source'].str.contains('pal-', na=False), 'Source Time Label'] = 'Pre-modern'
+df.loc[df['Source'].str.contains('pre-', na=False), 'Source Time Label'] = 'Non-Industrial'
 
 # If you also need to update 'Target Time Label', you can do the same
-df.loc[df['Target'].str.contains('ind', na=False), 'Target Time Label'] = 'Industrial'
-df.loc[df['Target'].str.contains('pal', na=False), 'Target Time Label'] = 'Pre-modern'
-df.loc[df['Target'].str.contains('pre', na=False), 'Target Time Label'] = 'Non-Industrial'
+df.loc[df['Target'].str.contains('ind-', na=False), 'Target Time Label'] = 'Industrial'
+df.loc[df['Target'].str.contains('pal-', na=False), 'Target Time Label'] = 'Pre-modern'
+df.loc[df['Target'].str.contains('pre-', na=False), 'Target Time Label'] = 'Non-Industrial'
 
 
 
@@ -87,10 +87,10 @@ pre_target_counts_normalized = pre_target_counts / pre_target_counts.sum()
 #%%
 #Combine normalized target counts
 
-target_counts_df = pd.DataFrame(index = ['Industrial','Non-Industrial', 'Pre-modern'], columns = ['Industrial','Non-Industrial', 'Pre-modern', 'Database Virus'])
-target_counts_df.loc['Industrial'] = ind_target_counts_normalized
-target_counts_df.loc['Non-Industrial'] = non_target_counts_normalized
-target_counts_df.loc['Pre-modern'] = pre_target_counts_normalized
+target_counts_df = pd.DataFrame(index = ['Source- Industrial','Source- Non-Industrial', 'Source- Pre-modern'], columns = ['Industrial','Non-Industrial', 'Pre-modern', 'Database Virus'])
+target_counts_df.loc['Source- Industrial'] = ind_target_counts_normalized
+target_counts_df.loc['Source- Non-Industrial'] = non_target_counts_normalized
+target_counts_df.loc['Source- Pre-modern'] = pre_target_counts_normalized
 
 #%%
 #Make heatmap
@@ -100,8 +100,39 @@ sns.heatmap(target_counts_df)
 plt.title('Normalized Target Time Label Counts by Source Time Label')
 plt.ylabel('Source Time Label')
 plt.xlabel('Target Time Label')
-plt.show()
+plot_filename = 'heatmap_normalized.png'
+plt.savefig(plot_filename)
 
-import matplotlib
-matplotlib.use('TkAgg')  # or 'Qt5Agg', 'Agg', 'TkAgg', etc.
+#%%
+def create_dict(df):
+    '''
+    Create a dictionary where each key is a unique genome and the values are an array of target lifestyles associated with that genome.
+    Parameters: df: the input dataframe (ie. ind_source_df)
+    '''
+
+    sorted_df = df.sort_values(by='Source', ascending=True, inplace=False)
+    target_count_dict = {}
+
+    for index, row in sorted_df.iterrows():
+        key = row['Source']
+        value = row['Target Time Label']
+        if key in target_count_dict:
+            target_count_dict[key].append(value)
+        else:
+            target_count_dict[key] = [value]
+
+    return target_count_dict
+
+#%%
+#create dictionaries for each time period source genome
+ind_dict = create_dict(ind_source_df)
+non_dict = create_dict(non_source_df)
+pre_dict = create_dict(pre_source_df)
+
+#%%
+unique_ind_genome_count = len(ind_dict.keys())
+unique_non_genome_count = len(non_dict.keys())
+unique_pre_genome_count = len(pre_dict.keys())
+
+#%%
 
