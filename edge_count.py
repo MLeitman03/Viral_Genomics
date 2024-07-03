@@ -39,8 +39,8 @@ df = pd.merge(df, target_genome_lifestyle, on = 'Target', how='left')
 # Add time period column for source and target genomes
 
 # Initialize the new columns with default values
-df['Source Time Label'] = 'Database Virus'
-df['Target Time Label'] = 'Database Virus'
+df['Source Time Label'] = df['Source']
+df['Target Time Label'] = df['Target']
 
 # Update 'Source Time Label' based on conditions
 df.loc[df['Source'].str.contains('ind-', na=False), 'Source Time Label'] = 'Industrial'
@@ -87,7 +87,7 @@ pre_target_counts_normalized = pre_target_counts / pre_target_counts.sum()
 #%%
 #Combine normalized target counts
 
-target_counts_df = pd.DataFrame(index = ['Source- Industrial','Source- Non-Industrial', 'Source- Pre-modern'], columns = ['Industrial','Non-Industrial', 'Pre-modern', 'Database Virus'])
+target_counts_df = pd.DataFrame(index = ['Source- Industrial','Source- Non-Industrial', 'Source- Pre-modern'], columns = ['Industrial','Non-Industrial', 'Pre-modern'])
 target_counts_df.loc['Source- Industrial'] = ind_target_counts_normalized
 target_counts_df.loc['Source- Non-Industrial'] = non_target_counts_normalized
 target_counts_df.loc['Source- Pre-modern'] = pre_target_counts_normalized
@@ -96,7 +96,8 @@ target_counts_df.loc['Source- Pre-modern'] = pre_target_counts_normalized
 #Make heatmap
 target_counts_df = target_counts_df.astype(float)
 plt.figure()
-sns.heatmap(target_counts_df)
+sns.set(style="whitegrid")
+sns.heatmap(target_counts_df, cmap='Blues')
 plt.title('Normalized Target Time Label Counts by Source Time Label')
 plt.ylabel('Source Time Label')
 plt.xlabel('Target Time Label')
@@ -136,3 +137,127 @@ unique_pre_genome_count = len(pre_dict.keys())
 
 #%%
 
+#initialize lists for dataframe columns
+ind_genomes = []
+ind_ind_counts = []
+ind_non_ind_counts = []
+ind_pre_counts = []
+ind_database_counts = []
+ind_lengths = []
+
+for key, values in ind_dict.items():
+    ind_genomes.append(key)
+    ind_lengths.append(len(values))
+    ind_ind_counts.append(values.count('Industrial'))
+    ind_non_ind_counts.append(values.count('Non-Industrial'))
+    ind_pre_counts.append(values.count('Pre-modern'))
+    ind_database_counts.append(len(values) - (values.count('Industrial') + values.count('Non-Industrial') + values.count('Pre-modern')))
+
+#dataframe where each genome has a count of industrial targets, non-industrial, and pre-modern
+ind_target_per_genome = pd.DataFrame({'Genome': ind_genomes,
+                                      'Industrial Targets': ind_ind_counts,
+                                      'Non-Industrial Targets': ind_non_ind_counts,
+                                      'Pre-modern Targets': ind_pre_counts,
+                                      'Database Targets': ind_database_counts,
+                                      'Number of connections': ind_lengths})
+
+#%%
+
+#normalized by total number of edges/connections
+normalized_ind_target_per_genome = ind_target_per_genome
+for column in ['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets', 'Database Targets']:
+    normalized_ind_target_per_genome[column] = ind_target_per_genome[column] / ind_target_per_genome['Number of connections']
+
+#%%
+
+#initialize lists for dataframe columns
+non_genomes = []
+non_ind_counts = []
+non_non_ind_counts = []
+non_pre_counts = []
+non_database_counts = []
+non_lengths = []
+
+for key, values in non_dict.items():
+    non_genomes.append(key)
+    non_lengths.append(len(values))
+    non_ind_counts.append(values.count('Industrial'))
+    non_non_ind_counts.append(values.count('Non-Industrial'))
+    non_pre_counts.append(values.count('Pre-modern'))
+    non_database_counts.append(len(values) - (values.count('Industrial') + values.count('Non-Industrial') + values.count('Pre-modern')))
+
+#dataframe where each genome has a count of industrial targets, non-industrial, and pre-modern
+non_target_per_genome = pd.DataFrame({'Genome': non_genomes,
+                                      'Industrial Targets': non_ind_counts,
+                                      'Non-Industrial Targets': non_non_ind_counts,
+                                      'Pre-modern Targets': non_pre_counts,
+                                      'Database Targets': non_database_counts,
+                                      'Number of connections': non_lengths})
+
+#%%
+
+#normalized by total number of edges/connections
+normalized_non_target_per_genome = non_target_per_genome
+for column in ['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets', 'Database Targets']:
+    normalized_non_target_per_genome[column] = non_target_per_genome[column] / non_target_per_genome['Number of connections']
+
+#%%
+#initialize lists for dataframe columns
+pre_genomes = []
+pre_ind_counts = []
+pre_non_ind_counts = []
+pre_pre_counts = []
+pre_database_counts = []
+pre_lengths = []
+
+for key, values in pre_dict.items():
+    pre_genomes.append(key)
+    pre_lengths.append(len(values))
+    pre_ind_counts.append(values.count('Industrial'))
+    pre_non_ind_counts.append(values.count('Non-Industrial'))
+    pre_pre_counts.append(values.count('Pre-modern'))
+    pre_database_counts.append(len(values) - (values.count('Industrial') + values.count('Non-Industrial') + values.count('Pre-modern')))
+
+#dataframe where each genome has a count of industrial targets, non-industrial, and pre-modern
+pre_target_per_genome = pd.DataFrame({'Genome': pre_genomes,
+                                      'Industrial Targets': pre_ind_counts,
+                                      'Non-Industrial Targets': pre_non_ind_counts,
+                                      'Pre-modern Targets': pre_pre_counts,
+                                      'Database Targets': pre_database_counts,
+                                      'Number of connections': pre_lengths})
+
+#%%
+
+#normalized by total number of edges/connections
+normalized_pre_target_per_genome = pre_target_per_genome
+for column in ['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets', 'Database Targets']:
+    normalized_pre_target_per_genome[column] = pre_target_per_genome[column] / pre_target_per_genome['Number of connections']
+
+
+#%%
+normalized_combined = pd.concat([
+    normalized_ind_target_per_genome.assign(Source='Industrial'),
+    normalized_non_target_per_genome.assign(Source='Non-Industrial'),
+    normalized_pre_target_per_genome.assign(Source='Pre-modern')
+])
+
+# Melt the combined DataFrame to long format
+df_melted_combined = pd.melt(
+    normalized_combined,
+    id_vars=['Genome', 'Source'],
+    value_vars=['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets'],
+    var_name='Target Type',
+    value_name='Proportion'
+)
+
+# Create the violin plot
+plt.figure(figsize=(14, 10))
+sns.violinplot(data=df_melted_combined, x='Source', y='Proportion', hue='Target Type', palette='rocket')
+plt.title('Proportion of Targets by Genome for Each Source Type')
+plt.ylabel('Proportion')
+plt.xlabel('Source Type')
+plt.legend(title='Target Type', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.tight_layout()
+
+plot_filename = 'violinplot_combined_normalized.png'
+plt.savefig(plot_filename)
