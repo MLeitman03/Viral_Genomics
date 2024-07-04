@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 #%%
-# Upload data
+# Upload data (vcontact2 output)
 edge_df = pd.read_table(filepath_or_buffer='/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/edge_weights.ntw', sep=' ', header=None)
 network_labels_df = pd.read_csv(filepath_or_buffer='/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
@@ -101,7 +101,7 @@ sns.heatmap(target_counts_df, cmap='Blues')
 plt.title('Normalized Target Time Label Counts by Source Time Label')
 plt.ylabel('Source Time Label')
 plt.xlabel('Target Time Label')
-plot_filename = 'heatmap_normalized.png'
+plot_filename = 'Viral_Genomics/outputs/heatmap_edge_counts_by_time.png'
 plt.savefig(plot_filename)
 
 #%%
@@ -253,11 +253,19 @@ df_melted_combined = pd.melt(
 # Create the violin plot
 plt.figure(figsize=(14, 10))
 sns.violinplot(data=df_melted_combined, x='Source', y='Proportion', hue='Target Type', palette='rocket')
-plt.title('Proportion of Targets by Genome for Each Source Type')
+plt.title('Proportion of Targets by Genome for Each Source Type (Edge Count by Source)')
 plt.ylabel('Proportion')
 plt.xlabel('Source Type')
 plt.legend(title='Target Type', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 
-plot_filename = 'violinplot_edge_counts.png'
+plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time.png'
 plt.savefig(plot_filename)
+
+#Add confidence intervals, look for statistical significance
+
+#%%
+#export source files
+ind_source_df.to_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/industrial_source_genomes.csv', index=False)
+non_source_df.to_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/nonindustrial_source_genomes.csv', index=False)
+pre_source_df.to_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/pre_modern_source_genomes.csv', index=False)
