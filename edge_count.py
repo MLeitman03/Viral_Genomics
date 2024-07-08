@@ -161,10 +161,11 @@ ind_target_per_genome = pd.DataFrame({'Genome': ind_genomes,
                                       'Database Targets': ind_database_counts,
                                       'Number of connections': ind_lengths})
 
+
 #%%
 
 #normalized by total number of edges/connections
-normalized_ind_target_per_genome = ind_target_per_genome
+normalized_ind_target_per_genome = ind_target_per_genome.copy()
 for column in ['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets', 'Database Targets']:
     normalized_ind_target_per_genome[column] = ind_target_per_genome[column] / ind_target_per_genome['Number of connections']
 
@@ -197,7 +198,7 @@ non_target_per_genome = pd.DataFrame({'Genome': non_genomes,
 #%%
 
 #normalized by total number of edges/connections
-normalized_non_target_per_genome = non_target_per_genome
+normalized_non_target_per_genome = non_target_per_genome.copy()
 for column in ['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets', 'Database Targets']:
     normalized_non_target_per_genome[column] = non_target_per_genome[column] / non_target_per_genome['Number of connections']
 
@@ -269,3 +270,63 @@ plt.savefig(plot_filename)
 ind_source_df.to_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/industrial_source_genomes.csv', index=False)
 non_source_df.to_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/nonindustrial_source_genomes.csv', index=False)
 pre_source_df.to_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/pre_modern_source_genomes.csv', index=False)
+
+
+#%%
+total_ind_nodes = len(ind_target_per_genome)
+total_non_nodes = len(non_target_per_genome)
+total_pre_nodes = len(pre_target_per_genome)
+total_nodes = total_ind_nodes + total_non_nodes + total_pre_nodes
+ind_node_prob = total_ind_nodes / total_nodes
+non_node_prob = total_non_nodes / total_nodes
+pre_node_prob = total_pre_nodes / total_nodes
+
+
+#%%
+double_norm_ind_per_genome = normalized_ind_target_per_genome.copy()
+double_norm_ind_per_genome['Industrial Targets'] = double_norm_ind_per_genome['Industrial Targets'] / ind_node_prob
+double_norm_ind_per_genome['Non-Industrial Targets'] = double_norm_ind_per_genome['Non-Industrial Targets'] / non_node_prob
+double_norm_ind_per_genome['Pre-modern Targets'] = double_norm_ind_per_genome['Pre-modern Targets'] / pre_node_prob
+
+double_norm_non_per_genome = normalized_non_target_per_genome.copy()
+double_norm_non_per_genome['Industrial Targets'] = double_norm_non_per_genome['Industrial Targets'] / ind_node_prob
+double_norm_non_per_genome['Non-Industrial Targets'] = double_norm_non_per_genome['Non-Industrial Targets'] / non_node_prob
+double_norm_non_per_genome['Pre-modern Targets'] = double_norm_non_per_genome['Pre-modern Targets'] / pre_node_prob
+
+double_norm_pre_per_genome = normalized_pre_target_per_genome.copy()
+double_norm_pre_per_genome['Industrial Targets'] = double_norm_pre_per_genome['Industrial Targets'] / ind_node_prob
+double_norm_pre_per_genome['Non-Industrial Targets'] = double_norm_pre_per_genome['Non-Industrial Targets'] / non_node_prob
+double_norm_pre_per_genome['Pre-modern Targets'] = double_norm_pre_per_genome['Pre-modern Targets'] / pre_node_prob
+
+
+#%%
+normalized_combined = pd.concat([
+    double_norm_ind_per_genome.assign(Source='Industrial'),
+    double_norm_non_per_genome.assign(Source='Non-Industrial'),
+    double_norm_pre_per_genome.assign(Source='Pre-modern')
+])
+
+# Melt the combined DataFrame to long format
+df_melted_combined = pd.melt(
+    normalized_combined,
+    id_vars=['Genome', 'Source'],
+    value_vars=['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets'],
+    var_name='Target Type',
+    value_name='Proportion'
+)
+
+# Create the violin plot
+plt.figure(figsize=(14, 10))
+sns.violinplot(data=df_melted_combined, x='Source', y='Proportion', hue='Target Type', palette='rocket')
+plt.title('Soore of Targets by Genome for Each Source Type (Edge Count by Source)')
+plt.ylabel('Score')
+plt.xlabel('Source Type')
+plt.legend(title='Target Type', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.tight_layout()
+
+plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time_double_normalized.png'
+plt.savefig(plot_filename)
+
+# each node has three data points, one per target type
+# each datapoint will represent the number of times / proportion more or less than the expected value assuming random chance that source node points to target of that type
+# assuming that given random chance, each node will have edges pointing to target types equal to the frequency of that target type out of all possible nodes
