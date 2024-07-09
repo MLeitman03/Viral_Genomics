@@ -9,6 +9,7 @@ import seaborn as sns
 ind = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/industrial_source_genomes.csv')
 non = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/nonindustrial_source_genomes.csv')
 pre = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/pre_modern_source_genomes.csv')
+network_labels_df = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
 
 #%%
@@ -175,4 +176,44 @@ plt.legend(title='Target Type', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 
 plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time_of_high_edge_weight_300.png'
+plt.savefig(plot_filename)
+
+#%%
+network_labels_df = network_labels_df.iloc[:,[0,5,6,7,8,9,10,11,12]]
+
+#%%
+ind_high_edge_weights_with_cluster_label = pd.merge(ind_high_edge_weights, network_labels_df, left_on='Source', right_on='Genome', how='left')
+non_high_edge_weights_with_cluster_label = pd.merge(non_high_edge_weights, network_labels_df, left_on='Source', right_on='Genome', how='left')
+pre_high_edge_weights_with_cluster_label = pd.merge(pre_high_edge_weights, network_labels_df, left_on='Source', right_on='Genome', how='left')
+
+#%%
+ind_target_counts = ind_high_edge_weights_with_cluster_label['Target Time Label'].value_counts()
+#normalized
+ind_target_counts_normalized = ind_target_counts / ind_target_counts.sum()
+
+#target time label counts for non-industrial source
+non_target_counts = non_high_edge_weights_with_cluster_label['Target Time Label'].value_counts()
+#normalized
+non_target_counts_normalized = non_target_counts / non_target_counts.sum()
+
+
+#%%
+#Combine normalized target counts
+
+target_counts_df = pd.DataFrame(index = ['Source- Industrial','Source- Non-Industrial'], columns = ['Industrial','Non-Industrial'])
+target_counts_df.loc['Source- Industrial'] = ind_target_counts_normalized
+target_counts_df.loc['Source- Non-Industrial'] = non_target_counts_normalized
+
+
+#%%
+#Make heatmap
+targets_counts_df = target_counts_df.T
+target_counts_df = target_counts_df.astype(float)
+plt.figure()
+sns.set(style="whitegrid")
+sns.heatmap(target_counts_df, cmap='Blues')
+plt.title('Normalized Target Time Label Counts by Source Time Label')
+plt.ylabel('Source Time Label')
+plt.xlabel('Target Time Label')
+plot_filename = 'Viral_Genomics/outputs/heatmap_edge_counts_by_time_for_edge_weight_300.png'
 plt.savefig(plot_filename)

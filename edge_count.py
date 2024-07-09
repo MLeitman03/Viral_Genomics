@@ -7,8 +7,8 @@ import seaborn as sns
 
 #%%
 # Upload data (vcontact2 output)
-edge_df = pd.read_table(filepath_or_buffer='/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/edge_weights.ntw', sep=' ', header=None)
-network_labels_df = pd.read_csv(filepath_or_buffer='/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
+edge_df = pd.read_table('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/edge_weights.ntw', sep=' ', header=None)
+network_labels_df = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
 
 #%%
@@ -263,6 +263,31 @@ plt.tight_layout()
 plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time.png'
 plt.savefig(plot_filename)
 
+#%%
+#grab total number of connections
+combined_counts = pd.concat([ind_target_per_genome, non_target_per_genome, pre_target_per_genome])
+combined_counts = combined_counts.iloc[:,[0,-1]]
+#%%
+combined_counts['Source Time Label'] = combined_counts['Genome']
+
+# Update 'Source Time Label' based on conditions
+combined_counts.loc[combined_counts['Genome'].str.contains('ind-', na=False), 'Source Time Label'] = 'Industrial'
+combined_counts.loc[combined_counts['Genome'].str.contains('pal-', na=False), 'Source Time Label'] = 'Pre-modern'
+combined_counts.loc[combined_counts['Genome'].str.contains('pre-', na=False), 'Source Time Label'] = 'Non-Industrial'
+
+#%%
+plt.figure(figsize=(14, 10))
+sns.violinplot(data=combined_counts, x='Source Time Label', y='Number of connections')
+plt.title('Edge Counts by Time Period')
+plt.xlabel('Source Time Label')
+plt.ylabel('Number of Connections')
+plt.tight_layout()
+
+# Save the plot
+plot_filename = '/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/outputs/total_edge_count_by_time_violin.png'
+plt.savefig(plot_filename)
+
+
 #Add confidence intervals, look for statistical significance
 
 #%%
@@ -309,8 +334,8 @@ normalized_combined = pd.concat([
 # Melt the combined DataFrame to long format
 df_melted_combined = pd.melt(
     normalized_combined,
-    id_vars=['Genome', 'Source'],
-    value_vars=['Industrial Targets', 'Non-Industrial Targets', 'Pre-modern Targets'],
+    id_vars=['Genome'],
+    value_vars=['Number of Connections'],
     var_name='Target Type',
     value_name='Proportion'
 )
@@ -330,3 +355,4 @@ plt.savefig(plot_filename)
 # each node has three data points, one per target type
 # each datapoint will represent the number of times / proportion more or less than the expected value assuming random chance that source node points to target of that type
 # assuming that given random chance, each node will have edges pointing to target types equal to the frequency of that target type out of all possible nodes
+# take out viruses with few connections to mitigate the paleo stuff
