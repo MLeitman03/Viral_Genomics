@@ -1,6 +1,7 @@
 #%%
 # Import libraries
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -73,6 +74,30 @@ plt.title('Distribution of Edge Weights')
 plt.xlabel('Edge Weight')
 plt.ylabel('Frequency')
 plt.savefig('Viral_Genomics/outputs/histogram_edge_weights.png')
+
+#%%
+pre_only_combined = combined.loc[combined['Source Time Label'] == 'Pre-modern']
+
+#%%
+# distribution of pre-modern source edge weights
+
+plt.figure(figsize=(10, 6))
+plt.hist(pre_only_combined['edge_weight'], bins=30, edgecolor='k', color='blue')
+plt.title('Distribution of Pre-modern Edge Weights')
+plt.xlabel('Edge Weight')
+plt.ylabel('Frequency')
+plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_pre_only.png')
+
+#%%
+# distribution of pre-modern source edge weights now with log-scaled y-axis
+
+plt.figure(figsize=(10, 6))
+plt.hist(pre_only_combined['edge_weight'], bins=30, edgecolor='k', color='blue')
+plt.yscale('log')
+plt.title('Distribution of Pre-modern Edge Weights')
+plt.xlabel('Edge Weight')
+plt.ylabel('Frequency (log-scaled)')
+plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_pre_only_log_scale.png')
 
 #%%
 

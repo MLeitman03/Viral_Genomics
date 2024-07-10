@@ -11,7 +11,6 @@ non = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/d
 pre = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/pre_modern_source_genomes.csv')
 network_labels_df = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
-
 #%%
 ind_high_edge_weights = ind.loc[ind['edge_weight'] == 300]
 
@@ -221,3 +220,16 @@ plt.savefig(plot_filename)
 #%%
 
 genomes_with_cluster_label = pd.concat([ind_high_edge_weights_with_cluster_label, non_high_edge_weights_with_cluster_label, pre_high_edge_weights_with_cluster_label])
+
+#%%
+# distribution of edge weights
+plt.figure(figsize=(10, 6))
+plt.hist(genomes_with_cluster_label['VC'].value_counts(), bins=200, edgecolor='k', color='blue')
+
+plt.savefig('Viral_Genomics/outputs/histogram_cluster_counts.png')
+
+#%%
+# Analysis pre-modern high edge weights
+high_pre = pre.loc[pre['edge_weight'] >= 200]
+high_pre = pd.merge(high_pre, network_labels_df, left_on='Source', right_on='Genome', how='left')
+clusters_to_focus_on = high_pre['VC'].value_counts()
