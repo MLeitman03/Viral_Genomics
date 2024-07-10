@@ -217,3 +217,7 @@ plt.ylabel('Source Time Label')
 plt.xlabel('Target Time Label')
 plot_filename = 'Viral_Genomics/outputs/heatmap_edge_counts_by_time_for_edge_weight_300.png'
 plt.savefig(plot_filename)
+
+#%%
+
+genomes_with_cluster_label = pd.concat([ind_high_edge_weights_with_cluster_label, non_high_edge_weights_with_cluster_label, pre_high_edge_weights_with_cluster_label])
