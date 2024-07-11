@@ -226,10 +226,10 @@ genomes_with_cluster_label = pd.concat([ind_high_edge_weights_with_cluster_label
 plt.figure(figsize=(10, 6))
 plt.hist(genomes_with_cluster_label['VC'].value_counts(), bins=200, edgecolor='k', color='blue')
 
-plt.savefig('Viral_Genomics/outputs/histogram_cluster_counts.png')
+plt.savefig('Viral_Genomics/outputs/histogram_cluster_counts_300.png')
 
 #%%
 # Analysis pre-modern high edge weights
-high_pre = pre.loc[pre['edge_weight'] >= 200]
+high_pre = pre.loc[pre['edge_weight'] >= 175]
 high_pre = pd.merge(high_pre, network_labels_df, left_on='Source', right_on='Genome', how='left')
 clusters_to_focus_on = high_pre['VC'].value_counts()
