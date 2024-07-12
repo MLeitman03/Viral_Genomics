@@ -21,6 +21,5 @@ In efforts to analyze genomic similarities in viral genomes from industrial, non
 
 ![mds_viral_genomes_by_time](https://github.com/user-attachments/assets/c5c9c86c-9cfd-4a36-ab47-369bdcc70d43)
 
-
 ![mds_viral_genomes_by_lifestyle](https://github.com/user-attachments/assets/ba28ddbe-a68d-4c69-a244-893f639234a2)
 
