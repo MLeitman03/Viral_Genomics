@@ -10,7 +10,6 @@ import seaborn as sns
 edge_df = pd.read_table('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/edge_weights.ntw', sep=' ', header=None)
 network_labels_df = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
-
 #%%
 # Merge dataframes on Genome label
 edge_df_genome_col = edge_df[[0]]
@@ -65,6 +64,7 @@ pre_source_df = df.loc[df['Source Time Label'] == 'Pre-modern'].loc[:, ['Source'
 testing = ind_source_df.loc[(ind_source_df['Source'] == 'ind-DNK_MH0192_k99_103327') & (ind_source_df['Target'].str.contains('pal')), 'Target']
 
 #yes, meaning each source is a target and vice versa
+
 
 #%%
 #target time label counts for industiral source
