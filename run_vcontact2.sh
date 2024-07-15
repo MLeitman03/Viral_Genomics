@@ -30,9 +30,23 @@ done
 # load the job environment:
 . /u/local/Modules/default/init/modules.sh
 module load anaconda3
-# To see which versions of anaconda are available use: module av anaconda
 
+# Initialize Conda for the shell
+eval "$(~/miniconda3/bin/conda shell.bash hook)"
+
+# Activate the conda environment
 conda activate vcontact2
+
+# Check if vcontact2 commands are available
+if ! command -v vcontact2_gene2genome &> /dev/null; then
+  echo "vcontact2_gene2genome could not be found"
+  exit 1
+fi
+
+if ! command -v vcontact2 &> /dev/null; then
+  echo "vcontact2 could not be found"
+  exit 1
+fi
 
 vDir="/u/scratch/m/madelain/vcontact2/vcontact2_output_${JOB_ID}"
 mkdir -p $vDir
@@ -41,7 +55,7 @@ mkdir -p $vDir
 vcontact2_gene2genome -p ${proteins_file} -o ${vDir}/protein_map.csv -s Prodigal-FAA
 vcontact2 --raw-proteins ${proteins_file} --rel-mode 'Diamond' --proteins-fp ${vDir}/protein_map.csv \
 --db 'ProkaryoticViralRefSeq201-Merged' --output-dir ${vDir} --pcs-mode MCL \
---vcs-mode ClusterONE --c1-bin ~/bin/cluster_one-1.0.jar
+--vcs-mode ClusterONE --c1-bin ~/miniconda3/envs/vcontact2_env/bin/cluster_one-1.0.jar
 
 # echo job info on joblog:
 echo "Job $JOB_ID ended on:   " `hostname -s`
