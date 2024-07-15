@@ -18,6 +18,12 @@ echo "Job $JOB_ID started on:   " `hostname -s`
 echo "Job $JOB_ID started on:   " `date `
 echo " "
 
+# Load Java 11 module
+module load java/jdk-11.0.14
+
+# Check Java version to ensure correct version is loaded
+java -version
+
 # Run InterProScan with adjusted memory settings
 export JAVA_OPTS="-Xms2g -Xmx4g"
 ./interproscan-5.68-100.0/interproscan.sh -i predicted_proteins.faa -f tsv -o interproscan_output.tsv
