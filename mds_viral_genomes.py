@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from sklearn.manifold import MDS
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 #%%
@@ -81,3 +82,27 @@ plt.ylabel('MDS2')
 plt.legend(title='Time Period')
 plot_filename = 'Viral_Genomics/outputs/mds_viral_genomes_by_time.png'
 plt.savefig(plot_filename)
+
+#%%
+# Apply MDS for 3 components
+mds = MDS(n_components=3, random_state=42)
+embedding = mds.fit_transform(pcs_presence_absence_df)
+
+#%%
+embedding_df_time = pd.DataFrame(embedding, columns=['MDS1', 'MDS2', 'MDS3'])
+embedding_df_time['metadata'] = metadata['Time']
+
+#%%
+#plot MDS projection colored by Time period (3D plot)
+fig = plt.figure(figsize=(15,15))
+ax = fig.add_subplot(111, projection='3d')
+scatter = ax.scatter(embedding_df_time['MDS1'], embedding_df_time['MDS2'], embedding_df_time['MDS3'],
+                     c=embedding_df_time['metadata'].astype('category').cat.codes, cmap='viridis', alpha=0.7)
+legend1 = ax.legend(*scatter.legend_elements(), title="Time Period")
+ax.add_artist(legend1)
+ax.set_title('MDS Projection of Viral Genomes')
+ax.set_xlabel('MDS1')
+ax.set_ylabel('MDS2')
+ax.set_zlabel('MDS3')
+plt.savefig('Viral_Genomics/outputs/mds_viral_genomes_by_time_3D.png')
+
