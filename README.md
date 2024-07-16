@@ -45,4 +45,9 @@ In efforts to analyze genomic similarities in viral genomes from industrial, non
 ![heatmap_edge_counts_by_time_for_edge_weight_300](https://github.com/user-attachments/assets/384d7a21-56f8-48d8-bf00-c2eb722160b2)
 ![violinplot_edge_counts_by_time_of_high_edge_weight_300](https://github.com/user-attachments/assets/870f3359-984b-4603-895d-748a5d141706)
 
+## Focusing on related viruses (top 90 percent of edge weights - edge weight = 144.43)
+
+![violinplot_edge_counts_by_time_of_high_edge_weight_top90percent](https://github.com/user-attachments/assets/cc4d469c-13c6-4ac1-ac74-6c4847500ba7)
+
+
 
