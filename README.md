@@ -40,3 +40,9 @@ In efforts to analyze genomic similarities in viral genomes from industrial, non
 ![mds_viral_genomes_clusters](https://github.com/user-attachments/assets/cf5d0708-4c03-4017-b277-5c6e35e0951e)
 ![mds_viral_genomes_distribution_in_clusters](https://github.com/user-attachments/assets/3d21842f-85b3-4786-9c5b-3c4073133158)
 
+## Focusing on related viruses
+
+![heatmap_edge_counts_by_time_for_edge_weight_300](https://github.com/user-attachments/assets/384d7a21-56f8-48d8-bf00-c2eb722160b2)
+![violinplot_edge_counts_by_time_of_high_edge_weight_300](https://github.com/user-attachments/assets/870f3359-984b-4603-895d-748a5d141706)
+
+
