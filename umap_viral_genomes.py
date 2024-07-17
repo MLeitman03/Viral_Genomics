@@ -219,6 +219,12 @@ def dendrogram_HC(embedding_df, output_dir, file_prefix):
     plt.savefig(f"{output_dir}{file_prefix}_hiearchical.png")
 
 #%%
+embedding_df_time_with_genome = pd.merge(embedding_df_time, pd.DataFrame(pcs_presence_absence_df.index), left_index=True, right_index=True)
+
+#%%
+embedding_df_time_with_genome.columns = ['UMAP1', 'UMAP2', 'Time', 'Genome']
+
+#%%
 #save to 'Viral_Genomics/outputs/'
 
 embedding_df_lifestyle['Genome'] = ' '

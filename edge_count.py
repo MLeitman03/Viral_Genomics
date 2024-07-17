@@ -11,6 +11,7 @@ edge_df = pd.read_table('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Geno
 network_labels_df = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
 #%%
+
 # Merge dataframes on Genome label
 edge_df_genome_col = edge_df[[0]]
 network_labels_df_genome_col = network_labels_df[['Genome']]

@@ -76,6 +76,15 @@ plt.ylabel('Frequency')
 plt.savefig('Viral_Genomics/outputs/histogram_edge_weights.png')
 
 #%%
+plt.figure(figsize=(10, 6))
+plt.hist(combined['edge_weight'], bins=30, edgecolor='k', color='blue')
+plt.yscale('log')
+plt.title('Distribution of Edge Weights')
+plt.xlabel('Edge Weight')
+plt.ylabel('Frequency (log-scaled)')
+plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_log_scale.png')
+
+#%%
 pre_only_combined = combined.loc[combined['Source Time Label'] == 'Pre-modern']
 
 #%%
