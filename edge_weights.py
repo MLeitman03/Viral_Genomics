@@ -85,6 +85,25 @@ plt.ylabel('Frequency (log-scaled)')
 plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_log_scale.png')
 
 #%%
+mean = np.mean(combined['edge_weight'])
+std = np.std(combined['edge_weight'])
+plt.figure(figsize=(10, 6))
+plt.hist(combined['edge_weight'], bins=30, edgecolor='k', color='lightsteelblue')
+plt.yscale('log')
+
+plt.axvline(mean, color='green', linestyle='dashed', linewidth=2, label='Mean')
+plt.axvline(mean + std, color='orange', linestyle='dashed', linewidth=2, label='Mean + 1 Std')
+plt.axvline(mean + 2 * std, color='yellow', linestyle='dashed', linewidth=2, label='Mean + 2 Std')
+plt.axvline(mean + 3 * std, color='purple', linestyle='dashed', linewidth=2, label='Mean + 3 Std')
+
+plt.legend()
+
+plt.title('Distribution of Pre-modern Edge Weights')
+plt.xlabel('Edge Weight')
+plt.ylabel('Frequency (log-scaled)')
+plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_all_log_scale_with_cutoffs.png')
+
+#%%
 pre_only_combined = combined.loc[combined['Source Time Label'] == 'Pre-modern']
 
 #%%
@@ -134,6 +153,30 @@ plt.tight_layout()
 plot_filename = 'Viral_Genomics/outputs/violinplot_edge_weights_to_database_by_time.png'
 plt.savefig(plot_filename)
 
-'''
-Cool to look into the top most related viruses. Look at their clusters. 
-'''
+#%%
+mean_weight_pre = np.mean(pre_only_combined['edge_weight'])
+std_weight_pre = np.std(pre_only_combined['edge_weight'])
+
+#%%
+one = mean_weight_pre + std_weight_pre
+two = mean_weight_pre + 2 * std_weight_pre
+three = mean_weight_pre + 3 * std_weight_pre
+four = mean_weight_pre + 4 * std_weight_pre
+
+#%%
+plt.figure(figsize=(10, 6))
+plt.hist(pre_only_combined['edge_weight'], bins=30, edgecolor='k', color='lightsteelblue')
+plt.yscale('log')
+
+plt.axvline(mean_weight_pre, color='green', linestyle='dashed', linewidth=2, label='Mean')
+plt.axvline(one, color='orange', linestyle='dashed', linewidth=2, label='Mean + 1 Std')
+plt.axvline(two, color='yellow', linestyle='dashed', linewidth=2, label='Mean + 2 Std')
+plt.axvline(three, color='purple', linestyle='dashed', linewidth=2, label='Mean + 3 Std')
+plt.axvline(four, color='red', linestyle='dashed', linewidth=2, label='Mean + 4 Std')
+
+plt.legend()
+
+plt.title('Distribution of Pre-modern Edge Weights')
+plt.xlabel('Edge Weight')
+plt.ylabel('Frequency (log-scaled)')
+plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_pre_only_log_scale_with_cutoffs.png')

@@ -179,7 +179,7 @@ plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time_of_high_e
 plt.savefig(plot_filename)
 
 #%%
-network_labels_df = network_labels_df.iloc[:,[0,5,6,7,8,9,10,11,12]]
+network_labels_df_clean = network_labels_df.iloc[:,[0,5,6,7,8,9,10,11,12]]
 
 #%%
 ind_high_edge_weights_with_cluster_label = pd.merge(ind_high_edge_weights, network_labels_df, left_on='Source', right_on='Genome', how='left')
@@ -249,11 +249,13 @@ all_percentile_90 = np.percentile(all_connections_with_label['edge_weight'], 90)
 #is this a good cut off?
 
 #%%
-ind_high_edge_weights = ind.loc[ind['edge_weight'] >= all_percentile_90]
+ind_high_edge_weights = ind.loc[ind['edge_weight'] >= 178.038369881808]
 
-non_high_edge_weights = non.loc[non['edge_weight'] >= all_percentile_90]
+non_high_edge_weights = non.loc[non['edge_weight'] >= 178.038369881808]
 
-pre_high_edge_weights = pre.loc[pre['edge_weight'] >= all_percentile_90]
+pre_high_edge_weights = pre.loc[pre['edge_weight'] >= 178.038369881808]
+
+#chosen cut off four edge weight analysis (four std above mean of pre-modern edge weights)
 
 #%%
 def create_dict(df):
@@ -411,6 +413,11 @@ plt.xlabel('Source Type')
 plt.legend(title='Target Type', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 
-plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time_of_high_edge_weight_top90percent.png'
+plot_filename = 'Viral_Genomics/outputs/violinplot_edge_counts_by_time_of_high_edge_weight_178.038369881808.png'
 plt.savefig(plot_filename)
 
+#%%
+pre_high_edge_weights_with_cluster_label = pd.merge(pre_high_edge_weights, network_labels_df_clean, left_on = 'Source', right_on= 'Genome', how = 'left')
+
+#%%
+clusters_to_focus_on = pre_high_edge_weights_with_cluster_label['VC'].value_counts()
