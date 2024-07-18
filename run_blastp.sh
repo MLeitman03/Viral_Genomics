@@ -1,18 +1,20 @@
 #!/bin/bash
+#$ -cwd
+#$ -j y
+#$ -o /u/scratch/m/madelain/blast.log
+#$ -l h_rt=12:00:00
+#$ -l h_vmem=128G  # Request 128B of memory
+#$ -m bea
 
-QUERY_FILE= '/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/pcs_to_seq.faa'
-DB_FILE='/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/VFDB_setB_pro.fas'
-DB_NAME="virulence_factors"
-OUTPUT_FILE="/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/blast_results_PCs.txt"
+#Set paths
+BLAST_DIR="/u/home/m/madelain/ncbi-blast-2.16.0+/bin"
+DB_DIR="/u/scratch/m/madelain/VFDB"
+QUERY="/u/scratch/m/madelain/pcs_to_seq.faa"
+DB="${DB_DIR}/VFDB_setB_pro"
+OUT="/u/scratch/m/madelain/blast_results.txt"
 
-# Create the BLAST database if it doesn't already exist
-if [ ! -f "${DB_NAME}.pin" ]; then
-    echo "Creating BLAST database..."
-    makeblastdb -in $DB_FILE -dbtype prot -out $DB_NAME
-fi
+# Create BLAST database
+$BLAST_DIR/makeblastdb -in /u/scratch/m/madelain/VFDB_setB_pro.fas -dbtype prot -out $DB
 
 # Run BLASTP
-echo "Running BLASTP..."
-blastp -query $QUERY_FILE -db $DB_NAME -out $OUTPUT_FILE -outfmt 6 -evalue 1e-5 -num_threads 8
-
-echo "BLASTP search completed. Results saved to $OUTPUT_FILE."
+$BLAST_DIR/blastp -query $QUERY -db $DB -out $OUT -evalue 1e-5 -outfmt 6 -num_threads 8
