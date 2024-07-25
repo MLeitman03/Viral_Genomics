@@ -30,7 +30,6 @@ In efforts to analyze genomic similarities in viral genomes from industrial, non
 ![violinplot_edge_weights_by_lifestyle](https://github.com/user-attachments/assets/cb26283b-143a-4456-a9c3-17a88436890f)
 ![violinplot_edge_weights_to_database_by_time](https://github.com/user-attachments/assets/2da2507f-1fd8-4d75-9576-8a9329c3fc7b)
 ![histogram_edge_weights_all_log_scale_with_cutoffs](https://github.com/user-attachments/assets/7f1e6434-21bc-4e0d-84f6-9d2afc24bf13)
-![histogram_edge_weights_pre_only_log_scale_with_cutoffs](https://github.com/user-attachments/assets/e47d314d-326a-405c-a8aa-d8dba0a26bb2)
 
 
 ## MDS 
@@ -40,14 +39,12 @@ In efforts to analyze genomic similarities in viral genomes from industrial, non
 ![mds_viral_genomes_clusters](https://github.com/user-attachments/assets/cf5d0708-4c03-4017-b277-5c6e35e0951e)
 ![mds_viral_genomes_distribution_in_clusters](https://github.com/user-attachments/assets/3d21842f-85b3-4786-9c5b-3c4073133158)
 
-## Focusing on related viruses (edge weight = 300)
+## Focusing on related viruses (edge weight > 178)
 
-![heatmap_edge_counts_by_time_for_edge_weight_300](https://github.com/user-attachments/assets/384d7a21-56f8-48d8-bf00-c2eb722160b2)
-![violinplot_edge_counts_by_time_of_high_edge_weight_300](https://github.com/user-attachments/assets/870f3359-984b-4603-895d-748a5d141706)
+![histogram_edge_weights_pre_only_log_scale_with_cutoffs](https://github.com/user-attachments/assets/e47d314d-326a-405c-a8aa-d8dba0a26bb2)
+![violinplot_edge_counts_by_time_of_high_edge_weight_178 038369881808](https://github.com/user-attachments/assets/74c6ace5-692d-4607-837f-86929a2ca5c3)
 
-## Focusing on related viruses (top 90 percent of edge weights - edge weight = 144.43)
+## Virulent Factors per Genome by Time Period
 
-![violinplot_edge_counts_by_time_of_high_edge_weight_top90percent](https://github.com/user-attachments/assets/cc4d469c-13c6-4ac1-ac74-6c4847500ba7)
-
-
+![VF_per_100_ORF_violin](https://github.com/user-attachments/assets/e50d85ac-1e51-47af-9e48-74b3ffa89eb5)
 
