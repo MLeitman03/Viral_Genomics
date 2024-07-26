@@ -29,7 +29,7 @@ In efforts to analyze genomic similarities in viral genomes from industrial, non
 ![violinplot_edge_weights_by_time](https://github.com/user-attachments/assets/df4cf192-242c-450c-bf53-21c3796baf2e)
 ![violinplot_edge_weights_by_lifestyle](https://github.com/user-attachments/assets/cb26283b-143a-4456-a9c3-17a88436890f)
 ![violinplot_edge_weights_to_database_by_time](https://github.com/user-attachments/assets/2da2507f-1fd8-4d75-9576-8a9329c3fc7b)
-![histogram_edge_weights_all_log_scale_with_cutoffs](https://github.com/user-attachments/assets/7f1e6434-21bc-4e0d-84f6-9d2afc24bf13)
+![histogram_edge_weights_all_log_scale_with_cutoffs](https://github.com/user-attachments/assets/1842c09e-70e1-429a-af16-a2fd437bc53a)
 
 
 ## MDS 
