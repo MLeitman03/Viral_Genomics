@@ -18,16 +18,9 @@ echo "Job $JOB_ID started on:   " `hostname -s`
 echo "Job $JOB_ID started on:   " `date `
 echo " "
 
-# Load Java 11 module
-module load java/jdk-11.0.14
-
-# Check Java version to ensure correct version is loaded
-java -version
-
-# Run InterProScan with adjusted memory settings
-export JAVA_OPTS="-Xms2g -Xmx4g"
-./interproscan-5.68-100.0/interproscan.sh -i predicted_proteins.faa -f tsv -o interproscan_output.tsv
-
+conda activate /u/home/m/madelain/miniconda3/envs/openjdk_11.0.1
+cd $SCRATCH/interproscan-5.68-100.0
+./interproscan.sh -appl AntiFam-7.0,CDD-3.20,Coils-2.2.1,FunFam-4.3.0,Gene3D-4.3.0,Hamap-2023_05,MobiDBLite-2.0,NCBIfam-14.0,PANTHER-18.0,Pfam-37.0,PIRSF-3.10,PIRSR-2023_05,PRINTS-42.0,SFLD-4,SMART-9.0,SUPERFAMILY-1.75, -dp -f tsv -goterms -i /u/home/m/madelain/pcs_to_seq_noasterick.faa -o pcs_interproscan_alldb.tsv
 # echo job info on joblog:
 echo "Job $JOB_ID ended on:   " `hostname -s`
 echo "Job $JOB_ID ended on:   " `date `
