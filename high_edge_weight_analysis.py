@@ -13,6 +13,9 @@ pre = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/d
 network_labels_df = pd.read_csv('/Users/madelaineleitman/Downloads/KnowlesLab/Viral_Genomics/data/network_labels.csv')
 
 #%%
+pre
+
+#%%
 ind_high_edge_weights = ind.loc[ind['edge_weight'] == 300]
 
 non_high_edge_weights = non.loc[non['edge_weight'] == 300]

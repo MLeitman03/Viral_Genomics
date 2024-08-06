@@ -98,7 +98,7 @@ plt.axvline(mean + 3 * std, color='purple', linestyle='dashed', linewidth=2, lab
 
 plt.legend()
 
-plt.title('Distribution of Pre-modern Edge Weights')
+plt.title('Distribution of Node Edge Weights')
 plt.xlabel('Edge Weight')
 plt.ylabel('Frequency (log-scaled)')
 plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_all_log_scale_with_cutoffs.png')
@@ -154,6 +154,27 @@ plot_filename = 'Viral_Genomics/outputs/violinplot_edge_weights_to_database_by_t
 plt.savefig(plot_filename)
 
 #%%
+# Melt the combined DataFrame to long format
+df_melted_combined_database = pd.melt(
+    only_database_target_combined,
+    id_vars=['Source', 'Source Time Label', 'Source Lifestyle'],
+    value_vars=['edge_weight'],
+    var_name='Metric',
+    value_name='Value'
+)
+
+# Create the violin plot
+plt.figure(figsize=(14, 10))
+sns.violinplot(data=df_melted_combined_database, x='Source Time Label', y='Value', hue = 'Source Lifestyle', split = True)
+plt.title('Edge Weights by Source to Database Viruses')
+plt.ylabel('Edge Weight')
+plt.xlabel('Source Time Period')
+plt.tight_layout()
+
+plot_filename = 'Viral_Genomics/outputs/violinplot_edge_weights_to_database_by_lifestyle_2.png'
+plt.savefig(plot_filename)
+
+#%%
 mean_weight_pre = np.mean(pre_only_combined['edge_weight'])
 std_weight_pre = np.std(pre_only_combined['edge_weight'])
 
@@ -180,3 +201,24 @@ plt.title('Distribution of Pre-modern Edge Weights')
 plt.xlabel('Edge Weight')
 plt.ylabel('Frequency (log-scaled)')
 plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_pre_only_log_scale_with_cutoffs.png')
+
+
+#%%
+# mean edge weight is 46.826821755877894
+
+combined_high = combined.loc[combined['edge_weight'] > 46.826821755877894]
+
+#%%
+# Count the number of targets each source has
+target_counts = combined_high['Source'].value_counts()
+
+# Plot the histogram
+plt.figure(figsize=(10, 6))
+plt.hist(target_counts, bins=range(1, target_counts.max() + 1), edgecolor='black')
+plt.title('Histogram of Number of Edges per Node with Greater than Average Edge Weights')
+plt.xlabel('Number of Edges')
+plt.ylabel('Frequency')
+plt.yscale('log')
+plt.grid(True)
+plt.show()
+plt.savefig('Viral_Genomics/outputs/histogram_edge_weights_target_counts_above_average.png')
